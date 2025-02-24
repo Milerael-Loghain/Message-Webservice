@@ -1,5 +1,4 @@
 CREATE TABLE messages (
-    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     internal_id INT NOT NULL,
     text TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL
