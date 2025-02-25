@@ -18,7 +18,10 @@ namespace Service.Data
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "INSERT INTO messages (internal_id, text, created_at) VALUES (@internalId, @text, @created_at)";
+                string query = @"
+                INSERT INTO messages (internal_id, text, created_at) 
+                VALUES (@internalId, @text, @created_at);";
+
                 using (var command = new NpgsqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("internalId", internalId);
