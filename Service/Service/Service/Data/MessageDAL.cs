@@ -30,6 +30,7 @@ namespace Service.Data
 
                 command.ExecuteNonQuery();
             }
+
         }
 
         public async Task<List<Message>> GetMessagesInRangeAsync(DateTime from, DateTime to)
@@ -40,10 +41,10 @@ namespace Service.Data
             await connection.OpenAsync();
 
             var query = @"
-            SELECT internal_id, text, created_at
-            FROM messages
-            WHERE created_at BETWEEN @from AND @to
-            ORDER BY created_at ASC;";
+                SELECT internal_id, text, created_at
+                FROM messages
+                WHERE created_at BETWEEN @from AND @to
+                ORDER BY created_at ASC;";
 
             await using var command = new NpgsqlCommand(query, connection);
             command.Parameters.AddWithValue("@from", from);

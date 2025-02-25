@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Service.Data.Abstract;
+using Service.DTO;
+using Service.Extensions;
 using Service.Hubs;
-using Service.Model;
 
 namespace Service.Controllers
 {
@@ -20,17 +21,19 @@ namespace Service.Controllers
         }
 
         [HttpPost("send")]
-        public IActionResult SendMessage([FromBody] Message message)
+        public IActionResult SendMessage([FromBody] SendMessageDTO messageDto)
         {
-            if (string.IsNullOrWhiteSpace(message.Text))
+            if (string.IsNullOrWhiteSpace(messageDto.Text))
             {
                 return BadRequest("Invalid message data.");
             }
 
-            if (message.Text.Length > 128)
+            if (messageDto.Text.Length > 128)
             {
                 return BadRequest("Message exceeds the 128-character limit.");
             }
+
+            var message = messageDto.ToMessage(DateTime.Now);
 
             _messageDAL.InsertMessage(message.InternalId, message.Text);
 

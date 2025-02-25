@@ -1,0 +1,43 @@
+# Ignore the build output
+bin/
+obj/
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows Installer and update files
+Thumbs.db
+Desktop.ini
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Dd]ist/
+[Dd]ebugShared/
+[Dd]ebugTests/
+[Dd]ebugLocal/
+[Dd]Release/
+[Dd]ReleasePublic/
+[Dd]ReleaseTests/
+
+# Windows image file caches
+Thumbs.db
+
+# User-specific files
+.vs/
+.idea/
+
+# JetBrains Rider project files
+.idea/
+
+# ASP.NET Scaffolding
+Scaffolding

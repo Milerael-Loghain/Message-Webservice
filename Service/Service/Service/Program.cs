@@ -14,7 +14,7 @@ builder.Services.AddSignalR();
 builder.Services.AddScoped<IMessageDAL>(provider =>
 {
     var configuration = provider.GetRequiredService<IConfiguration>();
-    var connectionString = configuration.GetConnectionString("MessageDb");
+    var connectionString = configuration.GetConnectionString("DefaultConnection");
 
     // Pass the connection string to the constructor
     return new MessageDAL(connectionString);
@@ -35,7 +35,7 @@ if (app.Environment.IsDevelopment())
 
 app.MapHub<MessageHub>("/messageHub");
 app.MapControllers();
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 
 app.Run();
