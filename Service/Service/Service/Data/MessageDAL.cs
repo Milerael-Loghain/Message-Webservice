@@ -13,26 +13,23 @@ namespace Service.Data
             _connectionString = connectionString;
         }
 
-        public Task InsertMessage(int internalId, string text)
+        public async Task InsertMessage(int internalId, string text)
         {
-            using (var connection = new NpgsqlConnection(_connectionString))
-            {
-                connection.Open();
-                string query = @"
+            await using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            string query = @"
                 INSERT INTO messages (internal_id, text, created_at) 
                 VALUES (@internalId, @text, @created_at);";
 
-                using (var command = new NpgsqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("internalId", internalId);
-                    command.Parameters.AddWithValue("text", text);
-                    command.Parameters.AddWithValue("created_at", DateTime.Now);
+            await using (var command = new NpgsqlCommand(query, connection))
+            {
+                command.Parameters.AddWithValue("internalId", internalId);
+                command.Parameters.AddWithValue("text", text);
+                command.Parameters.AddWithValue("created_at", DateTime.Now);
 
-                    command.ExecuteNonQuery();
-                }
+                command.ExecuteNonQuery();
             }
-
-            return Task.CompletedTask;
         }
 
         public async Task<List<Message>> GetMessagesInRangeAsync(DateTime from, DateTime to)
