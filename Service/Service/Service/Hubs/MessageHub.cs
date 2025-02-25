@@ -1,6 +1,12 @@
-namespace Service.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
-public class MessageHub
+namespace Service.Hubs
 {
-    
+    public class MessageHub : Hub
+    {
+        public async Task SendMessageToAllClients(string message)
+        {
+            await Clients.All.SendAsync("ReceiveMessage", message);
+        }
+    }
 }
