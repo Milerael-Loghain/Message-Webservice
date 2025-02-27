@@ -15,5 +15,36 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./init:/docker-entrypoint-initdb.d
 
+  service:
+    build:
+      context: ./Service/Service
+    container_name: my_dotnet_service
+    restart: always
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_URLS: "http://+:5109"
+    ports:
+      - "5109:8080"
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  nginx:
+    build:
+      context: ./Clients
+    container_name: my_nginx
+    restart: always
+    ports:
+      - "8081:80"
+    depends_on:
+      - service
+    networks:
+      - app-network
+
 volumes:
   postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

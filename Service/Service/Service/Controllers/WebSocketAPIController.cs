@@ -4,12 +4,12 @@ using Service.Services.Abstract;
 
 [ApiController]
 [Route("ws")]
-public class WebsSocketAPIController : ControllerBase
+public class WebSocketAPIController : ControllerBase
 {
     private readonly IWebSocketService _webSocketService;
-    private readonly ILogger<WebsSocketAPIController> _logger;
+    private readonly ILogger<WebSocketAPIController> _logger;
 
-    public WebsSocketAPIController(IWebSocketService webSocketService, ILogger<WebsSocketAPIController> logger)
+    public WebSocketAPIController(IWebSocketService webSocketService, ILogger<WebSocketAPIController> logger)
     {
         _webSocketService = webSocketService;
         _logger = logger;
