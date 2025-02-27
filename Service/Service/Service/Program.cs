@@ -6,15 +6,25 @@ using Service.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var fileLoggerPath = "logs/app.log";
+var fileLoggerPath = $"logs/app-log-{DateTime.Now:yyyyMMdd}.log";
 builder.Services.AddSingleton<ILoggerProvider>(new FileLoggerProvider(fileLoggerPath));
 
 builder.Services.AddControllers();
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    // Path to the XML documentation file
+    var xmlFile = Path.Combine(AppContext.BaseDirectory, "Service.xml");
+    options.IncludeXmlComments(xmlFile); // Make sure to include this line
+});
+
 builder.Services.AddSignalR();
+
 
 builder.Services.AddCors(options =>
 {

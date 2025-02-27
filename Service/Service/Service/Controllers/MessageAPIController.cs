@@ -23,6 +23,11 @@ namespace Service.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Sends a message to the database and broadcasts it to all WebSocket clients.
+        /// </summary>
+        /// <param name="messageDto">The message data to send.</param>
+        /// <returns>Returns a 200 OK response if the message is successfully processed.</returns>
         [HttpPost("send")]
         public async Task<IActionResult> SendMessage([FromBody] SendMessageDTO messageDto)
         {
@@ -68,6 +73,12 @@ namespace Service.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Retrieves messages from the database within the specified date range.
+        /// </summary>
+        /// <param name="from">The starting date to fetch messages from.</param>
+        /// <param name="to">The ending date to fetch messages to.</param>
+        /// <returns>Returns a list of messages within the specified date range.</returns>
         [HttpGet("history")]
         public async Task<IActionResult> GetMessagesByDateRange([FromQuery] DateTime from, [FromQuery] DateTime to)
         {
