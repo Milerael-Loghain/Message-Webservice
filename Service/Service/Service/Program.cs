@@ -2,8 +2,12 @@ using Service.Data;
 using Service.Data.Abstract;
 using Service.Services;
 using Service.Services.Abstract;
+using Service.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var fileLoggerPath = "logs/app.log";
+builder.Services.AddSingleton<ILoggerProvider>(new FileLoggerProvider(fileLoggerPath));
 
 builder.Services.AddControllers();
 // Add services to the container.
