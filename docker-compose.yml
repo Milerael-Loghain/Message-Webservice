@@ -16,8 +16,7 @@ services:
       - ./init:/docker-entrypoint-initdb.d
 
   service:
-    build:
-      context: ./Service/Service
+    image: ghcr.io/milerael-loghain/messages-service:latest
     container_name: my_dotnet_service
     restart: always
     environment:
@@ -31,8 +30,7 @@ services:
       - app-network
 
   nginx:
-    build:
-      context: ./Clients
+    image: ghcr.io/milerael-loghain/messages-client:latest
     container_name: my_nginx
     restart: always
     ports:
