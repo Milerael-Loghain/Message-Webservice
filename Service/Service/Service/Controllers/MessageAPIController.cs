@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Service.Data.Abstract;
 using Service.DTO;
 using Service.Extensions;
-using Service.Hubs;
+using Service.Services.Abstract;
 
 namespace Service.Controllers
 {
@@ -12,16 +13,16 @@ namespace Service.Controllers
     public class MessageApiController : ControllerBase
     {
         private readonly IMessageDAL _messageDAL;
-        private readonly IHubContext<MessageHub> _hubContext;
+        private readonly IWebSocketService _webSocketService;
 
-        public MessageApiController(IMessageDAL messageDAL, IHubContext<MessageHub> hubContext)
+        public MessageApiController(IMessageDAL messageDAL, IWebSocketService webSocketService)
         {
             _messageDAL = messageDAL;
-            _hubContext = hubContext;
+            _webSocketService = webSocketService;
         }
 
         [HttpPost("send")]
-        public IActionResult SendMessage([FromBody] SendMessageDTO messageDto)
+        public async Task<IActionResult> SendMessage([FromBody] SendMessageDTO messageDto)
         {
             if (string.IsNullOrWhiteSpace(messageDto.Text))
             {
@@ -37,7 +38,7 @@ namespace Service.Controllers
 
             _messageDAL.InsertMessage(message.InternalId, message.Text);
 
-            _hubContext.Clients.All.SendAsync("ReceiveMessage", message);
+            await _webSocketService.BroadcastMessage(message);
 
             return Ok();
         }

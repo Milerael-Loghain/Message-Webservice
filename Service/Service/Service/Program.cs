@@ -1,6 +1,7 @@
 using Service.Data;
 using Service.Data.Abstract;
-using Service.Hubs;
+using Service.Services;
+using Service.Services.Abstract;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,20 +12,33 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy => policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
 builder.Services.AddScoped<IMessageDAL>(provider =>
 {
     var configuration = provider.GetRequiredService<IConfiguration>();
     var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-    // Pass the connection string to the constructor
     return new MessageDAL(connectionString);
 });
+
+builder.Services.AddSingleton<IWebSocketService, WebSocketService>();
 
 
 var app = builder.Build();
 
+app.UseWebSockets();
+
 app.UseRouting();
 
+app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -33,9 +47,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapHub<MessageHub>("/messageHub");
 app.MapControllers();
-//app.UseHttpsRedirection();
-
 
 app.Run();

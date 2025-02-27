@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message History</title>
+</head>
+<body>
+    <h2>Message History (Last 10 Minutes)</h2>
+    <button onclick="fetchHistory()">Load History</button>
+    <ul id="history"></ul>
+
+    <script>
+        function fetchHistory() {
+            const now = new Date();
+            const tenMinutesAgo = new Date(now.getTime() - 10 * 60 * 1000);
+            
+            const from = tenMinutesAgo.toISOString();
+            const to = now.toISOString();
+            
+            fetch(`http://localhost:5109/api/messages/history?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`)
+                .then(response => response.json())
+                .then(messages => {
+                    const historyList = document.getElementById('history');
+                    historyList.innerHTML = ''; // Clear previous results
+
+                    messages.forEach(message => {
+                        console.log(message);
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `[${message.createdAt}] #${message.internalId}: ${message.text}`;
+                        historyList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error("Error fetching history:", error));
+        }
+
+    </script>
+</body>
+</html>

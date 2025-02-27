@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Receiver</title>
+</head>
+<body>
+    <h2>Message Receiver</h2>
+    <ul id="messages"></ul>
+
+    <script>
+        const socket = new WebSocket('ws://localhost:5109/ws/messages');
+        const messagesList = document.getElementById('messages');
+
+        socket.onmessage = function(event) {
+            const message = JSON.parse(event.data);
+            console.log(event.data)
+            const listItem = document.createElement('li');
+            listItem.textContent = `[${message.CreatedAt}] #${message.InternalId}: ${message.Text}`;
+            messagesList.appendChild(listItem);
+        };
+
+        socket.onopen = () => console.log("Connected to WebSocket server");
+        socket.onerror = (error) => console.error("WebSocket error:", error);
+        socket.onclose = () => console.log("WebSocket connection closed");
+    </script>
+</body>
+</html>

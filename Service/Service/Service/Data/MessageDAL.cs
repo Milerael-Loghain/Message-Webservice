@@ -26,7 +26,7 @@ namespace Service.Data
             {
                 command.Parameters.AddWithValue("internalId", internalId);
                 command.Parameters.AddWithValue("text", text);
-                command.Parameters.AddWithValue("created_at", DateTime.Now);
+                command.Parameters.AddWithValue("created_at", DateTime.UtcNow);
 
                 command.ExecuteNonQuery();
             }

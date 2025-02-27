@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Sender</title>
+</head>
+<body>
+    <h2>Message Sender</h2>
+    <button onclick="startSending()">Start Sending</button>
+    <button onclick="stopSending()">Stop Sending</button>
+    <script>
+        let interval;
+        let id = 0;
+        
+        function sendMessage() {
+            const message = {
+                Text: "Random message " + Math.random(),
+                InternalId: id
+            };
+
+            fetch('http://localhost:5109/api/messages/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(message)
+            }).then(response => 
+            {
+                console.log("Sent:", message)
+                id += 1;
+            })
+              .catch(error => console.error("Error sending message:", error));
+              
+        }
+
+        function startSending() {
+            if (!interval) {
+                interval = setInterval(sendMessage, 2000);
+            }
+        }
+
+        function stopSending() {
+            clearInterval(interval);
+            interval = null;
+        }
+    </script>
+</body>
+</html>
