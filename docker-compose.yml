@@ -14,14 +14,16 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
 
   service:
-    image: ghcr.io/milerael-loghain/messages-service:latest
+    build:
+      context: ./Service/Service
     container_name: my_dotnet_service
     restart: always
     environment:
       ASPNETCORE_ENVIRONMENT: "Production"
-      ASPNETCORE_URLS: "http://+:5109"
     ports:
       - "5109:8080"
     depends_on:
@@ -30,7 +32,8 @@ services:
       - app-network
 
   nginx:
-    image: ghcr.io/milerael-loghain/messages-client:latest
+    build:
+      context: ./Clients
     container_name: my_nginx
     restart: always
     ports:
