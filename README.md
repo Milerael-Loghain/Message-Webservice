@@ -21,7 +21,7 @@ To run the project locally using Docker Compose, use the following command:
 docker-compose up
 ```
 
-This will build and start all services.
+This will start all services.
 
 ## Docker Compose Services
 ### 1. **Database (PostgreSQL)**
